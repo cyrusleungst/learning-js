@@ -20,7 +20,7 @@ const renderCountry = function (data, className = "") {
     `;
 
   countriesContainer.insertAdjacentHTML("beforeend", html);
-  // countriesContainer.style.opacity = 1;
+  countriesContainer.style.opacity = 1;
 };
 
 const renderError = function (msg) {
@@ -215,7 +215,7 @@ const whereAmI = function (lat, lng) {
 
       return response.json();
     })
-    .then((data) => renderCountry(data))
+    .then((data) => renderCountry(data[0]))
     .catch((error) => console.log(`${error.message}, pepe`));
 };
 
