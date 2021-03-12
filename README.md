@@ -1,3 +1,3 @@
-# Learning-js
+# learning-js
 
-Relearning JS through 'You don't know JS' and Udemy
+Strengthening JS concepts through 'You don't know JS' and Udemy
