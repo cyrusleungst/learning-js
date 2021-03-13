@@ -219,6 +219,71 @@ const whereAmI = function (lat, lng) {
     .catch((error) => console.log(`${error.message}, pepe`));
 };
 
-whereAmI(52.508, 13.381);
-whereAmI(19.037, 72.873);
-whereAmI(-33.933, 18.474);
+// whereAmI(52.508, 13.381);
+// whereAmI(19.037, 72.873);
+// whereAmI(-33.933, 18.474);
+
+console.log(`Test start`);
+setTimeout(() => console.log("O sec timer"), 0);
+Promise.resolve("Resolved promise 1").then((response) => console.log(response));
+console.log("Test end");
+
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log("Lottery draw is happening");
+  setTimeout(() => {
+    if (Math.random() >= 0.5) {
+      resolve("You WON");
+    } else {
+      reject(new Error("You LOST"));
+    }
+  }, 2000);
+});
+
+// error is the rejected function i.e. 'You lost' and resolve is the fufilled function
+lotteryPromise
+  .then((resolve) => console.log(resolve))
+  .catch((error) => console.log(error));
+
+//Promisfying set timeout
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(1)
+  .then(() => {
+    console.log("I waited for 1 seconds");
+    return wait(1);
+  })
+  .then(() => {
+    console.log("I waited for 2 seconds");
+    return wait(1);
+  })
+  .then(() => {
+    console.log("I waited for 3 seconds");
+    return wait(1);
+  })
+  .then(() => {
+    console.log("I waited for 4 seconds");
+    return wait(1);
+  })
+  .then(() => {
+    console.log("I waited for 5 seconds");
+    return wait(1);
+  })
+  .then(() => {
+    console.log("I waited for 6 seconds");
+    return wait(1);
+  })
+  .then(() => {
+    console.log("I waited for 7 seconds");
+    return wait(1);
+  })
+  .then(() => console.log("I waited for 8 second"));
+
+//Create fufilled or rejected promise quickly
+Promise.resolve("You winnored").then((res) => console.log(res));
+Promise.resolve(new Error("You are a loser")).catch((res) =>
+  console.error(res)
+);
