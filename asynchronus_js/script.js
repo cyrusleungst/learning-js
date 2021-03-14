@@ -188,36 +188,36 @@ const getCountryData = function (country) {
 
 //btn.addEventListener("click", () => getCountryData("china"));
 
-btn.addEventListener("click", () => getCountryData("australia"));
+//btn.addEventListener("click", () => getCountryData("australia"));
 
 //WHERE AM I
-const whereAmI = function (lat, lng) {
-  //part 1:1 reverse geocode
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
-    .then((response) => {
-      console.log(response);
+// const whereAmI = function (lat, lng) {
+//   //part 1:1 reverse geocode
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then((response) => {
+//       console.log(response);
 
-      if (!response.ok)
-        throw new Error(`Problem with geocoding, ${response.status}`);
+//       if (!response.ok)
+//         throw new Error(`Problem with geocoding, ${response.status}`);
 
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      console.log(`You are in ${data.city}, ${data.country}`);
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log(data);
+//       console.log(`You are in ${data.city}, ${data.country}`);
 
-      return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
-    })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Country not found, ${response.status}`);
-      }
+//       return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
+//     })
+//     .then((response) => {
+//       if (!response.ok) {
+//         throw new Error(`Country not found, ${response.status}`);
+//       }
 
-      return response.json();
-    })
-    .then((data) => renderCountry(data[0]))
-    .catch((error) => console.log(`${error.message}, pepe`));
-};
+//       return response.json();
+//     })
+//     .then((data) => renderCountry(data[0]))
+//     .catch((error) => console.log(`${error.message}, pepe`));
+// };
 
 // whereAmI(52.508, 13.381);
 // whereAmI(19.037, 72.873);
@@ -245,45 +245,148 @@ lotteryPromise
   .catch((error) => console.log(error));
 
 //Promisfying set timeout
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// wait(1)
+//   .then(() => {
+//     console.log("I waited for 1 seconds");
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log("I waited for 2 seconds");
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log("I waited for 3 seconds");
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log("I waited for 4 seconds");
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log("I waited for 5 seconds");
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log("I waited for 6 seconds");
+//     return wait(1);
+//   })
+//   .then(() => {
+//     console.log("I waited for 7 seconds");
+//     return wait(1);
+//   })
+//   .then(() => console.log("I waited for 8 second"));
+
+//Create fufilled or rejected promise quickly
+// Promise.resolve("You winnored").then((res) => console.log(res));
+// Promise.resolve(new Error("You are a loser")).catch((res) =>
+//   console.error(res)
+// );
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => resolve(position),
+    //   (error) => reject(error)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+// getPosition().then((position) => console.log(position));
+
+const whereAmI = function () {
+  getPosition()
+    .then((position) => {
+      const { latitude: lat, longitude: lng } = position.coords;
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+    //part 1:1 reverse geocode
+    .then((response) => {
+      console.log(response);
+
+      if (!response.ok)
+        throw new Error(`Problem with geocoding, ${response.status}`);
+
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      console.log(`You are in ${data.city}, ${data.country}`);
+
+      return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Country not found, ${response.status}`);
+      }
+
+      return response.json();
+    })
+    .then((data) => renderCountry(data[0]))
+    .catch((error) => console.log(`${error.message}, pepe`));
+};
+
+btn.addEventListener("click", whereAmI);
+
+// PART 1
+// 1. Create a function 'createImage' which receives imgPath as an input. This function returns a promise which creates a new image (use document.createElement('img')) and sets the .src attribute to the provided image path. When the image is done loading, append it to the DOM element with the 'images' class, and resolve the promise. The fulfilled value should be the image element itself. In case there is an error loading the image ('error' event), reject the promise.
+
+// If this part is too tricky for you, just watch the first part of the solution.
+
+// PART 2
+// 2. Comsume the promise using .then and also add an error handler;
+// 3. After the image has loaded, pause execution for 2 seconds using the wait function we created earlier;
+// 4. After the 2 seconds have passed, hide the current image (set display to 'none'), and load a second image (HINT: Use the image element returned by the createImage promise to hide the current image. You will need a global variable for that 😉);
+// 5. After the second image has loaded, pause execution for 2 seconds again;
+// 6. After the 2 seconds have passed, hide the current image.
+
+// TEST DATA: Images in the img folder. Test the error handler by passing a wrong image path. Set the network speed to 'Fast 3G' in the dev tools Network tab, otherwise images load too fast.
+
 const wait = function (seconds) {
   return new Promise(function (resolve) {
     setTimeout(resolve, seconds * 1000);
   });
 };
 
-wait(1)
-  .then(() => {
-    console.log("I waited for 1 seconds");
-    return wait(1);
-  })
-  .then(() => {
-    console.log("I waited for 2 seconds");
-    return wait(1);
-  })
-  .then(() => {
-    console.log("I waited for 3 seconds");
-    return wait(1);
-  })
-  .then(() => {
-    console.log("I waited for 4 seconds");
-    return wait(1);
-  })
-  .then(() => {
-    console.log("I waited for 5 seconds");
-    return wait(1);
-  })
-  .then(() => {
-    console.log("I waited for 6 seconds");
-    return wait(1);
-  })
-  .then(() => {
-    console.log("I waited for 7 seconds");
-    return wait(1);
-  })
-  .then(() => console.log("I waited for 8 second"));
+const imgContainer = document.querySelector(".images");
 
-//Create fufilled or rejected promise quickly
-Promise.resolve("You winnored").then((res) => console.log(res));
-Promise.resolve(new Error("You are a loser")).catch((res) =>
-  console.error(res)
-);
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement("img");
+    img.src = imgPath;
+
+    img.addEventListener("load", function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener("error", () => reject(new Error("Image not found")));
+  });
+};
+
+let currentImg;
+
+createImage("img/img-1.jpg")
+  .then((img) => {
+    currentImg = img;
+    console.log("Image 1 loaded");
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = "none";
+    return createImage("img/img-2.jpg");
+  })
+  .then((img) => {
+    currentImg = img;
+    console.log("Image 2 loaded");
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = "none";
+  })
+  .catch((error) => console.error(error));
