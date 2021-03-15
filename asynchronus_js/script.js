@@ -288,15 +288,15 @@ lotteryPromise
 //   console.error(res)
 // );
 
-const getPosition = function () {
-  return new Promise(function (resolve, reject) {
-    // navigator.geolocation.getCurrentPosition(
-    //   (position) => resolve(position),
-    //   (error) => reject(error)
-    // );
-    navigator.geolocation.getCurrentPosition(resolve, reject);
-  });
-};
+// const getPosition = function () {
+//   return new Promise(function (resolve, reject) {
+//     // navigator.geolocation.getCurrentPosition(
+//     //   (position) => resolve(position),
+//     //   (error) => reject(error)
+//     // );
+//     navigator.geolocation.getCurrentPosition(resolve, reject);
+//   });
+// };
 
 // getPosition().then((position) => console.log(position));
 
@@ -390,3 +390,31 @@ createImage("img/img-1.jpg")
     currentImg.style.display = "none";
   })
   .catch((error) => console.error(error));
+
+//CREATE WHEREAMI FUNCTION WITH ASYNC AWAIT
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmIasync = async function () {
+  //Geolocation
+  const position = await getPosition();
+  const { latitude: lat, longitude: lng } = position.coords;
+
+  //Reverse geocoding
+  const geoRes = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+  const geoData = await geoRes.json();
+
+  //Country data
+  const response = await fetch(
+    `https://restcountries.eu/rest/v2/name/${geoData.country}`
+  );
+  const data = await response.json();
+  console.log(data);
+  renderCountry(data[0]);
+};
+
+whereAmIasync();
+console.log("FIRST");
